@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\MemberIndexController;
+use App\Http\Middleware\RedirectIfNotMember;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,5 +29,10 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware([RedirectIfNotMember::class])
+    ->group(function () {
+        Route::get('/members', MemberIndexController::class);
+    });
 
 require __DIR__.'/auth.php';
