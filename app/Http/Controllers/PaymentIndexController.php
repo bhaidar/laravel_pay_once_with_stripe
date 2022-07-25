@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class PaymentIndexController extends Controller
 {
@@ -17,6 +18,6 @@ class PaymentIndexController extends Controller
             ],
         ]);
 
-        dd($paymentIntent);
+        return Inertia::render('Payments/Index', ['paymentIntent' => $paymentIntent]);
     }
 }

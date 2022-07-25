@@ -31,7 +31,7 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware([RedirectIfNotMember::class])
+Route::middleware(['auth', RedirectIfNotMember::class])
     ->group(function () {
         Route::get('/members', MemberIndexController::class);
         Route::get('/payments', PaymentIndexController::class);
