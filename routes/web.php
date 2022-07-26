@@ -5,6 +5,7 @@ use App\Http\Controllers\MemberIndexController;
 use App\Http\Controllers\PaymentIndexController;
 use App\Http\Controllers\PaymentRedirectController;
 use App\Http\Controllers\StripeWebhookController;
+use App\Http\Middleware\RedirectIfMember;
 use App\Http\Middleware\RedirectIfNotMember;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Foundation\Application;
@@ -40,7 +41,8 @@ Route::middleware(['auth'])
         Route::get('/members', MemberIndexController::class)
             ->middleware([RedirectIfNotMember::class]);
 
-        Route::prefix('/payments')
+        Route::middleware([RedirectIfMember::class])
+            ->prefix('/payments')
             ->group(function () {
                 Route::get('/', PaymentIndexController::class);
 
