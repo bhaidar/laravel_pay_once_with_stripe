@@ -8,6 +8,7 @@ use App\Http\Controllers\StripeWebhookController;
 use App\Http\Middleware\RedirectIfMember;
 use App\Http\Middleware\RedirectIfNotMember;
 use App\Http\Middleware\VerifyCsrfToken;
+use App\Http\Middleware\VerifyStripeWebhookSecret;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -52,7 +53,8 @@ Route::middleware(['auth'])
             });
     });
 
-    Route::post('/webhooks/stripe', StripeWebhookController::class)
-        ->withoutMiddleware([VerifyCsrfToken::class]);
+Route::post('/webhooks/stripe', StripeWebhookController::class)
+    ->middleware([VerifyStripeWebhookSecret::class])
+    ->withoutMiddleware([VerifyCsrfToken::class]);
 
-    require __DIR__.'/auth.php';
+require __DIR__.'/auth.php';
