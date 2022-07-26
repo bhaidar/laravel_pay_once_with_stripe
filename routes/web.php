@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MemberIndexController;
 use App\Http\Controllers\PaymentIndexController;
 use App\Http\Controllers\PaymentRedirectController;
+use App\Http\Controllers\StripeWebhookController;
 use App\Http\Middleware\RedirectIfNotMember;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Foundation\Application;
@@ -34,9 +35,10 @@ Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::middleware(['auth', RedirectIfNotMember::class])
+Route::middleware(['auth'])
     ->group(function () {
-        Route::get('/members', MemberIndexController::class);
+        Route::get('/members', MemberIndexController::class)
+            ->middleware([RedirectIfNotMember::class]);
 
         Route::prefix('/payments')
             ->group(function () {
@@ -48,4 +50,7 @@ Route::middleware(['auth', RedirectIfNotMember::class])
             });
     });
 
-require __DIR__.'/auth.php';
+    Route::post('/webhooks/stripe', StripeWebhookController::class)
+        ->withoutMiddleware([VerifyCsrfToken::class]);
+
+    require __DIR__.'/auth.php';
