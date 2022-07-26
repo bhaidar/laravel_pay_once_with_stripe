@@ -1,42 +1,6 @@
-<template>
-    <Head title="Payment" />
-
-    <BreezeAuthenticatedLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Payment
-            </h2>
-        </template>
-
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
-                         <StripeElements
-                            v-slot="{ elements }"
-                            ref="elms"
-                            :stripe-key="stripeKey"
-                            :instance-options="instanceOptions"
-                            :elements-options="elementsOptions"
-                            class="py-8"
-                        >
-                            <StripeElement
-                                ref="card"
-                                :elements="elements"
-                                :options="cardOptions"
-                            />
-                        </StripeElements>
-                        <div v-if="cardError" v-text="cardError" class="text-red-500 mt-2" />
-                        <BreezeButton class="mt-4" @click.prevent="makePayment">Make Payment</BreezeButton>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </BreezeAuthenticatedLayout>
-</template>
-
 <script setup>
-import { computed, defineProps, ref } from 'vue';
+import { computed, ref } from 'vue';
+import { Inertia } from '@inertiajs/inertia'
 import { Head, usePage } from '@inertiajs/inertia-vue3';
 import { StripeElements, StripeElement } from 'vue-stripe-js'
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
@@ -73,12 +37,9 @@ const makePayment = async function(e) {
     }
 
     if (paymentIntent) {
-
+        // Redirect to Dashboard
+        Inertia.post(route('payments.redirect'));
     }
-
-    // if (result.paymentIntent?.status === 'succeeded') {
-    //     console.log('Payment successful!');
-    // }
 };
 
 const stripeKey = ref(import.meta.env.VITE_STRIPE_KEY);
@@ -111,3 +72,40 @@ const cardOptions = ref({
 });
 const cardError = ref();
 </script>
+
+<template>
+    <Head title="Payment" />
+
+    <BreezeAuthenticatedLayout>
+        <template #header>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                Payment
+            </h2>
+        </template>
+
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 bg-white border-b border-gray-200">
+                         <StripeElements
+                            v-slot="{ elements }"
+                            ref="elms"
+                            :stripe-key="stripeKey"
+                            :instance-options="instanceOptions"
+                            :elements-options="elementsOptions"
+                            class="py-8"
+                        >
+                            <StripeElement
+                                ref="card"
+                                :elements="elements"
+                                :options="cardOptions"
+                            />
+                        </StripeElements>
+                        <div v-if="cardError" v-text="cardError" class="text-red-500 mt-2" />
+                        <BreezeButton class="mt-4" @click.prevent="makePayment">Make Payment</BreezeButton>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </BreezeAuthenticatedLayout>
+</template>

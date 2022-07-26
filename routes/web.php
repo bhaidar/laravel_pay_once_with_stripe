@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MemberIndexController;
 use App\Http\Controllers\PaymentIndexController;
+use App\Http\Controllers\PaymentRedirectController;
 use App\Http\Middleware\RedirectIfNotMember;
+use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,14 +30,22 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', DashboardController::class)
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware(['auth', RedirectIfNotMember::class])
     ->group(function () {
         Route::get('/members', MemberIndexController::class);
-        Route::get('/payments', PaymentIndexController::class);
+
+        Route::prefix('/payments')
+            ->group(function () {
+                Route::get('/', PaymentIndexController::class);
+
+                Route::post('/redirect', PaymentRedirectController::class)
+                ->withoutMiddleware([VerifyCsrfToken::class])
+                ->name('payments.redirect');
+            });
     });
 
 require __DIR__.'/auth.php';
