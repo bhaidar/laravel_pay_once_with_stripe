@@ -26,6 +26,7 @@ class VerifyStripeWebhookSecret
                 config('stripe.webhook_secret'),
             );
         } catch (SignatureVerificationException $e) {
+            \Log::error($e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage(), $e);
         }
 

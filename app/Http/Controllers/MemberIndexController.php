@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\RedirectIfNotMember;
+use App\Models\Course;
+use CourseStartsThisWeek;
+use Illuminate\Pipeline\Pipeline;
 use Inertia\Inertia;
 
 class MemberIndexController extends Controller
 {
-    public function __construct()
-    {
-        //$this->middleware([RedirectIfNotMember::class]);
-    }
-
     public function __invoke()
     {
-        return Inertia::render('Members/Index');
+        $courses = app(Pipeline::class)
+        ->send(Course::latest())
+        ->through([
+            CourseStartsThisWeek::class,
+        ])
+        ->get();
+
+        return Inertia::render('Members/Index', ['courses' => $courses]);
     }
 }

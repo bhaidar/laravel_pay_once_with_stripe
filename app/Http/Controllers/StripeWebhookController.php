@@ -11,8 +11,12 @@ class StripeWebhookController extends Controller
 {
     public function __invoke(Request $request)
     {
+        \Log::info('Hello Stripe!');
+
         $payload = json_decode($request->getContent(), true);
         $method = 'handle'.Str::studly(str_replace('.', '_', $payload['type']));
+
+        \Log::info($method);
 
         if (method_exists($this, $method)) {
             return $this->{$method}($payload);
@@ -29,6 +33,7 @@ class StripeWebhookController extends Controller
             'member' => true,
         ]);
 
+        \Log::info($user);
         // send user email
     }
 }
