@@ -20,6 +20,8 @@ class VerifyStripeWebhookSecret
     public function handle(Request $request, Closure $next)
     {
         try {
+            \Log::info('Verifying Stripe Secret');
+
             WebhookSignature::verifyHeader(
                 $request->getContent(),
                 $request->header('Stripe-Signature'),

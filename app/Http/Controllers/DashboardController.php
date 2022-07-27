@@ -9,6 +9,8 @@ class DashboardController extends Controller
 {
     public function __invoke(Request $request)
     {
+        \Log::info('Dashboard');
+
         return Inertia::render('Dashboard', ['status' => session('status')]);
     }
 }
