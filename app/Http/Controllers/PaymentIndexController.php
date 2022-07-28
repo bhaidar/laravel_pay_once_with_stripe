@@ -17,6 +17,7 @@ class PaymentIndexController extends Controller
                 'metadata' => [
                     'user_id' => (string) $request->user()->id,
                 ],
+                'payment_method_types' => ['card'],
             ]);
 
             session()->put('payment_intent_id', $paymentIntent->id);

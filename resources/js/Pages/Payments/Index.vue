@@ -1,3 +1,42 @@
+<template>
+    <Head title="Payment" />
+
+    <BreezeAuthenticatedLayout>
+        <template #header>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                Payment
+            </h2>
+        </template>
+
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 bg-white border-b border-gray-200">
+                         <StripeElements
+                            v-slot="{ elements }"
+                            ref="elms"
+                            :stripe-key="stripeKey"
+                            :instance-options="instanceOptions"
+                            :elements-options="elementsOptions"
+                            class="py-8"
+                        >
+                            <!-- type="payment" -->
+                            <StripeElement
+                                ref="card"
+                                type="payment"
+                                :elements="elements"
+                                :options="cardOptions"
+                            />
+                        </StripeElements>
+                        <div v-if="cardError" v-text="cardError" class="text-red-500 mt-2" />
+                        <BreezeButton class="mt-4" @click.prevent="makePayment">Make Payment</BreezeButton>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </BreezeAuthenticatedLayout>
+</template>
+
 <script setup>
 import { computed, ref } from 'vue';
 import { Inertia } from '@inertiajs/inertia'
@@ -18,6 +57,16 @@ const cardElement = () => card.value.stripeElement;
 const makePayment = async function(e) {
     cardError.value = null;
 
+    // Use this code with payment elements not card element
+    // const { paymentIntent, error } = await stripe().confirmPayment({
+    //     elements: card.value.elements,
+    //     confirmParams: {
+    //         return_url: 'http://localhost:8098/dashboard',
+    //     }
+    // });
+
+
+    // Use this code with card element not payment element
     const { paymentIntent, error } = await stripe().confirmCardPayment(
         `${props.paymentIntent.client_secret}`,
         {
@@ -50,6 +99,15 @@ const instanceOptions = ref({
 })
 const elementsOptions = ref({
     // https://stripe.com/docs/js/elements_object/create#stripe_elements-options
+
+    // To use Payment Element, set the clientSecret and appearance
+    // and use type="payment"
+    clientSecret: props.paymentIntent.client_secret,
+
+    // https://stripe.com/docs/elements/appearance-api
+    appearance: {
+        theme: 'stripe',
+    },
 })
 const cardOptions = ref({
     // https://stripe.com/docs/stripe.js#element-options
@@ -68,44 +126,8 @@ const cardOptions = ref({
         color: "#fa755a",
         iconColor: "#fa755a"
       }
-    }
+    },
+    clientSecret: stripeKey,
 });
 const cardError = ref();
 </script>
-
-<template>
-    <Head title="Payment" />
-
-    <BreezeAuthenticatedLayout>
-        <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Payment
-            </h2>
-        </template>
-
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
-                         <StripeElements
-                            v-slot="{ elements }"
-                            ref="elms"
-                            :stripe-key="stripeKey"
-                            :instance-options="instanceOptions"
-                            :elements-options="elementsOptions"
-                            class="py-8"
-                        >
-                            <StripeElement
-                                ref="card"
-                                :elements="elements"
-                                :options="cardOptions"
-                            />
-                        </StripeElements>
-                        <div v-if="cardError" v-text="cardError" class="text-red-500 mt-2" />
-                        <BreezeButton class="mt-4" @click.prevent="makePayment">Make Payment</BreezeButton>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </BreezeAuthenticatedLayout>
-</template>
