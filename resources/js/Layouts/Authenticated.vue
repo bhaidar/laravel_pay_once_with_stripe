@@ -30,11 +30,20 @@ const showingNavigationDropdown = ref(false);
                                 <BreezeNavLink :href="route('dashboard')" :active="route().current('dashboard')">
                                     Dashboard
                                 </BreezeNavLink>
+                                <BreezeNavLink :href="route('products')" :active="route().current('products')">
+                                    Products
+                                </BreezeNavLink>
+                                <!-- Show only for auth -->
+                                <BreezeNavLink :href="route('members')" :active="route().current('members')">
+                                    Member Area
+                                </BreezeNavLink>
+                                <!-- Show only for auth -->
                             </div>
                         </div>
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
                             <!-- Settings Dropdown -->
+                            <!-- Show only for auth -->
                             <div class="ml-3 relative">
                                 <BreezeDropdown align="right" width="48">
                                     <template #trigger>
@@ -56,6 +65,7 @@ const showingNavigationDropdown = ref(false);
                                     </template>
                                 </BreezeDropdown>
                             </div>
+                            <!-- Show only for auth -->
                         </div>
 
                         <!-- Hamburger -->
@@ -79,7 +89,9 @@ const showingNavigationDropdown = ref(false);
                     </div>
 
                     <!-- Responsive Settings Options -->
+
                     <div class="pt-4 pb-1 border-t border-gray-200">
+                        <!-- Show only for auth -->
                         <div class="px-4">
                             <div class="font-medium text-base text-gray-800">{{ $page.props.auth.user.name }}</div>
                             <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
@@ -90,6 +102,7 @@ const showingNavigationDropdown = ref(false);
                                 Log Out
                             </BreezeResponsiveNavLink>
                         </div>
+                        <!-- Show only for auth -->
                     </div>
                 </div>
             </nav>

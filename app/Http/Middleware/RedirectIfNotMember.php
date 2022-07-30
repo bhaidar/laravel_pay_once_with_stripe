@@ -17,7 +17,7 @@ class RedirectIfNotMember
     public function handle(Request $request, Closure $next)
     {
         if (! $request->user()->member) {
-            return redirect('/dashboard');
+            return redirect('/payments');
         }
 
         return $next($request);
