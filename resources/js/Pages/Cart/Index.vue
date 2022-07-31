@@ -12,6 +12,7 @@ const props = defineProps({
 
 const cartProductsExist = computed(() => props.cart?.products?.length > 0);
 const products = computed(() => props.cart?.products);
+const total = computed(() => props.cart?.total);
 
 const removeFromCart = function(product) {
     Inertia.delete(route('cart.products.destroy', product));
@@ -41,7 +42,7 @@ const removeFromCart = function(product) {
                             </Button>
                         </div>
                         <div class="mt-4">
-                            <div class="mb-2">Cart Total: x</div>
+                            <div class="mb-2">Cart Total: {{ total }}</div>
                             <Button @click="checkout">
                                 Checkout
                             </Button>
