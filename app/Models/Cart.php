@@ -19,4 +19,9 @@ class Cart extends Model
         return $this->belongsToMany(Product::class)
         ->withTimestamps();
     }
+
+    public function scopeBySession()
+    {
+        return $this->where('session_id', session()->getId());
+    }
 }

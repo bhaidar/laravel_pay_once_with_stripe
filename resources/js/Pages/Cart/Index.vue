@@ -13,10 +13,8 @@ const props = defineProps({
 const cartProductsExist = computed(() => props.cart?.products?.length > 0);
 const products = computed(() => props.cart?.products);
 
-const removeFromCart = function(e) {
-    // Inertia.post(route('cart.products.store'), {
-    //     product_id: props.product.id,
-    // });
+const removeFromCart = function(product) {
+    Inertia.delete(route('cart.products.destroy', product));
 }
 </script>
 
@@ -38,7 +36,7 @@ const removeFromCart = function(e) {
                             <div class="font-semibold">{{ product.title }}</div>
                             <div>{{ product.price }}</div>
 
-                            <Button class="mt-3" @click="removeFromCart">
+                            <Button class="mt-3" @click="removeFromCart(product)">
                                 Remove
                             </Button>
                         </div>

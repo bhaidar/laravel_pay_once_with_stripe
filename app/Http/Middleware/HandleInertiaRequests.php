@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
             'auth.user' => fn () => $request->user()
                 ? $request->user()->only('id', 'name', 'email')
                 : null,
-            'cart' => fn () => Cart::query()->with('products')->where('session_id', session()->getId())->first(),
+            'cart' => fn () => Cart::bySession()->with('products')->first(),
             'ziggy' => function () use ($request) {
                 return array_merge((new Ziggy)->toArray(), [
                     'location' => $request->url(),
