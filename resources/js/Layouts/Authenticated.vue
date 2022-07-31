@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import BreezeApplicationLogo from '@/Components/ApplicationLogo.vue';
 import BreezeDropdown from '@/Components/Dropdown.vue';
 import BreezeDropdownLink from '@/Components/DropdownLink.vue';
@@ -36,6 +36,9 @@ const showingNavigationDropdown = ref(false);
                                 <!-- Show only for auth -->
                                 <BreezeNavLink :href="route('members')" :active="route().current('members')">
                                     Member Area
+                                </BreezeNavLink>
+                                <BreezeNavLink :href="route('cart.index')" :active="route().current('cart.index')">
+                                    Cart ({{ $page.props.cart?.products?.length ?? 0 }})
                                 </BreezeNavLink>
                                 <!-- Show only for auth -->
                             </div>

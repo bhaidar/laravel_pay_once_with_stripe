@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CartProductController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MemberIndexController;
 use App\Http\Controllers\PaymentIndexController;
@@ -33,8 +34,10 @@ Route::middleware(['auth'])
     });
 
 Route::middleware(['auth'])
+    ->prefix('/cart')
     ->group(function () {
-        Route::post('/cart/products', [CartController::class, 'store'])->name('cart.products.store');
+        Route::get('/', [CartController::class, 'index'])->name('cart.index');
+        Route::post('/products', [CartProductController::class, 'store'])->name('cart.products.store');
     });
 
 Route::get('/dashboard', DashboardController::class)
