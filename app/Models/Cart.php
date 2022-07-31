@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Cashier\Cashier;
 
 class Cart extends Model
 {
@@ -22,11 +23,11 @@ class Cart extends Model
 
     public function scopeBySession()
     {
-        return $this->where('session_id', session()->getId());
+        return $this->where('session_id', session()->getId())->latest();
     }
 
     public function total()
     {
-        return $this->products->sum('price');
+        return Cashier::formatAmount($this->products->sum('price'), config('cashier.currency'));
     }
 }

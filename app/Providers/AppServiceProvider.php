@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 
@@ -31,5 +32,8 @@ class AppServiceProvider extends ServiceProvider
                 $query->time
             );
         });
+
+        // To prevent wrapping results of Resource Collection with the 'data' field
+        JsonResource::withoutWrapping();
     }
 }

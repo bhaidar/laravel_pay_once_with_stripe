@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\ProductResource;
 use App\Models\Cart;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -40,11 +41,17 @@ class HandleInertiaRequests extends Middleware
                 ? $request->user()->only('id', 'name', 'email')
                 : null,
             'cart' => function () {
-                $cart = Cart::bySession()->with('products')->first();
+                try {
+                    $cart = Cart::bySession()->with('products')->firstOrFail();
+                } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                    \Log::error($e->getMessage());
+
+                    return null;
+                }
 
                 return [
-                    'products' => $cart?->products,
-                    'total' => $cart?->total(),
+                    'products' => ProductResource::collection($cart->products),
+                    'total' => $cart->total(),
                 ];
             },
             'ziggy' => function () use ($request) {

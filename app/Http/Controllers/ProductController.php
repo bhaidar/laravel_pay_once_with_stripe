@@ -10,6 +10,6 @@ class ProductController extends Controller
 {
     public function show(Request $request, Product $product)
     {
-        return Inertia::render('Products/Show', ['product' => $product]);
+        return Inertia::render('Products/Show', ['product' => $product->toResource()]);
     }
 }
