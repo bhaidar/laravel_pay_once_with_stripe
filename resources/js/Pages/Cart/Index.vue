@@ -2,8 +2,9 @@
 import { computed } from 'vue';
 import BreezeAuthenticatedLayout from '@/Layouts/Authenticated.vue';
 import Button from '@/Components/Button.vue';
+import LinkButton from '@/Components/LinkButton.vue'
 import { Inertia } from '@inertiajs/inertia'
-import { Head } from '@inertiajs/inertia-vue3';
+import { Head, Link } from '@inertiajs/inertia-vue3';
 
 const props = defineProps({
     auth: Object,
@@ -43,9 +44,7 @@ const removeFromCart = function(product) {
                         </div>
                         <div class="mt-4">
                             <div class="mb-2">Cart Total: {{ total }}</div>
-                            <Button @click="checkout">
-                                Checkout
-                            </Button>
+                            <LinkButton :href="route('checkout.index')">Checkout</LinkButton>
                         </div>
                     </template>
                     <template v-else>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CartProductController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MemberIndexController;
 use App\Http\Controllers\PaymentIndexController;
@@ -26,39 +27,35 @@ Route::get('/', function () {
     ]);
 });
 
-Route::middleware(['auth'])
-    ->prefix('/products')
-    ->group(function () {
-        Route::get('/', ProductsController::class)->name('products');
-        Route::get('/{product:slug}', [ProductController::class, 'show'])->name('products.show');
-    });
+Route::middleware(['auth'])->prefix('/products')->group(function () {
+    Route::get('/', ProductsController::class)->name('products');
+    Route::get('/{product:slug}', [ProductController::class, 'show'])->name('products.show');
+});
 
-Route::middleware(['auth'])
-    ->prefix('/cart')
-    ->group(function () {
-        Route::get('/', [CartController::class, 'index'])->name('cart.index');
-        Route::post('/products', [CartProductController::class, 'store'])->name('cart.products.store');
-        Route::delete('/products/{product:slug}', [CartProductController::class, 'destroy'])->name('cart.products.destroy');
-    });
+Route::middleware(['auth'])->prefix('/cart')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/products', [CartProductController::class, 'store'])->name('cart.products.store');
+    Route::delete('/products/{product:slug}', [CartProductController::class, 'destroy'])->name('cart.products.destroy');
+});
 
-Route::get('/dashboard', DashboardController::class)
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+Route::middleware(['auth'])->prefix('/checkout')->group(function () {
+    Route::get('/', [CheckoutController::class, 'index'])->name('checkout.index');
+});
 
-Route::middleware(['auth'])
-->group(function () {
+Route::get('/dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware(['auth'])->group(function () {
     Route::get('/members', MemberIndexController::class)
         ->middleware([RedirectIfNotMember::class])
         ->name('members');
 
-    Route::middleware([RedirectIfMember::class])
-        ->group(function () {
-            Route::get('/payments', PaymentIndexController::class);
+    Route::middleware([RedirectIfMember::class])->group(function () {
+        Route::get('/payments', PaymentIndexController::class);
 
-            Route::post('/payments/redirect', PaymentRedirectController::class)
-                ->withoutMiddleware([VerifyCsrfToken::class])
-                ->name('payments.redirect');
-        });
+        Route::post('/payments/redirect', PaymentRedirectController::class)
+            ->withoutMiddleware([VerifyCsrfToken::class])
+            ->name('payments.redirect');
+    });
 });
 
 Route::post('/webhooks/stripe', StripeWebhookController::class)
