@@ -36,7 +36,7 @@ const checkout = async function(e) {
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <Button @click.prevent="checkout">Checkout</Button>
+                    <Button @click.prevent="checkout">Pay</Button>
                 </div>
             </div>
         </div>
