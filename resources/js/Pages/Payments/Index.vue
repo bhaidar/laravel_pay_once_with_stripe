@@ -23,7 +23,6 @@
                             <!-- type="payment" -->
                             <StripeElement
                                 ref="card"
-                                type="payment"
                                 :elements="elements"
                                 :options="cardOptions"
                             />
@@ -102,12 +101,12 @@ const elementsOptions = ref({
 
     // To use Payment Element, set the clientSecret and appearance
     // and use type="payment"
-    clientSecret: props.paymentIntent.client_secret,
+    //clientSecret: props.paymentIntent.client_secret,
 
     // https://stripe.com/docs/elements/appearance-api
-    appearance: {
-        theme: 'stripe',
-    },
+    // appearance: {
+    //     theme: 'stripe',
+    // },
 })
 const cardOptions = ref({
     // https://stripe.com/docs/stripe.js#element-options
