@@ -33,6 +33,9 @@ const showingNavigationDropdown = ref(false);
                                 <BreezeNavLink :href="route('products')" :active="route().current('products')">
                                     Products
                                 </BreezeNavLink>
+                                <BreezeNavLink :href="route('orders.index')" :active="route().current('orders.index')">
+                                    My Orders
+                                </BreezeNavLink>
                                 <!-- Show only for auth -->
                                 <BreezeNavLink :href="route('members')" :active="route().current('members')">
                                     Member Area

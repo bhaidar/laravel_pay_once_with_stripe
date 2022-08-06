@@ -5,6 +5,7 @@ use App\Http\Controllers\CartProductController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MemberIndexController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentIndexController;
 use App\Http\Controllers\PaymentRedirectController;
 use App\Http\Controllers\ProductController;
@@ -56,6 +57,10 @@ Route::middleware(['auth'])->group(function () {
             ->withoutMiddleware([VerifyCsrfToken::class])
             ->name('payments.redirect');
     });
+});
+
+Route::middleware(['auth'])->prefix('/orders')->group(function () {
+    Route::get('/', [OrderController::class, 'index'])->name('orders.index');
 });
 
 // In case using Laravel Cashier
