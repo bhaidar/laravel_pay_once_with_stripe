@@ -21,6 +21,12 @@ class StripeWebhookController extends CashierWebhookController
 
             // Create order
             $order = $user->orders()->create();
+
+            // Attach products to order
+            $order->products()->attach($cart->products);
+
+            // Delete the cart
+            $cart->fresh()->delete();
         }
     }
 

@@ -12,4 +12,9 @@ class Order extends Model
     protected $fillable = [
         'user_id',
     ];
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class);
+    }
 }
