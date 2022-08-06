@@ -3,37 +3,45 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
+use Laravel\Cashier\Http\Controllers\WebhookController as CashierWebhookController;
 
-class StripeWebhookController extends Controller
+//class StripeWebhookController extends Controller
+
+// In case, using Cashier, extend CashierWebhookController
+class StripeWebhookController extends CashierWebhookController
 {
-    public function __invoke(Request $request)
+    protected function handleCheckoutSessionCompleted($payload)
     {
-        \Log::info('Hello Stripe!');
+        // Copied from CashierWebhookController
+        $user = $this->getUserByStripeId($payload['data']['object']['customer']);
 
-        $payload = json_decode($request->getContent(), true);
-        $method = 'handle'.Str::studly(str_replace('.', '_', $payload['type']));
+        if ($user) {
+            // Bring the user cart
+            $cart = $user->cart;
 
-        \Log::info($method);
-
-        if (method_exists($this, $method)) {
-            return $this->{$method}($payload);
+            // Create order
+            $order = $user->orders()->create();
         }
     }
 
-    protected function handlePaymentIntentSucceeded($payload)
-    {
-        // lookup the user
-        $user = User::query()->findOrFail(Arr::get($payload, 'data.object.metadata.user_id'));
+    /**
+     * Enable only when handling payment intent with payment elements or card
+     * In this case, no need for Laravel Cashier
+     *
+     * @param  mixed  $payload
+     * @return void
+     */
+    // protected function handlePaymentIntentSucceeded($payload)
+    // {
+    //     // lookup the user
+    //     $user = User::query()->findOrFail(Arr::get($payload, 'data.object.metadata.user_id'));
 
-        // make user member
-        $user->update([
-            'member' => true,
-        ]);
+    //     // make user member
+    //     $user->update([
+    //         'member' => true,
+    //     ]);
 
-        \Log::info($user);
-        // send user email
-    }
+    //     \Log::info($user);
+    //     // send user email
+    // }
 }

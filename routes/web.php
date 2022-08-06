@@ -58,8 +58,14 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-Route::post('/webhooks/stripe', StripeWebhookController::class)
+// In case using Laravel Cashier
+Route::post('/webhooks/stripe', [StripeWebhookController::class, 'handleWebhook'])
     ->middleware([VerifyStripeWebhookSecret::class])
     ->withoutMiddleware([VerifyCsrfToken::class]);
+
+// Not using Laravel Cashier, for payment intent
+// Route::post('/webhooks/stripe', StripeWebhookController::class)
+//         ->middleware([VerifyStripeWebhookSecret::class])
+//         ->withoutMiddleware([VerifyCsrfToken::class]);
 
 require __DIR__.'/auth.php';
