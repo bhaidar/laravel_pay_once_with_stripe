@@ -38,7 +38,7 @@ const userHasOrders = computed(() => props.orders?.length > 0);
                                 v-for="product in order.products"
                                 :key="product.id"
                             >
-                                <div>{{ product.title }} <a href="#" class="text-indigo-500">Download</a></div>
+                                <div>{{ product.title }} <a :href="route('products.download.show', product)" class="text-indigo-500">Download</a></div>
                             </div>
                         </div>
                        <div class="mt-4">

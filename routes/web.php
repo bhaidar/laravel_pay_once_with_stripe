@@ -9,6 +9,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentIndexController;
 use App\Http\Controllers\PaymentRedirectController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductDownloadController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\StripeWebhookController;
 use App\Http\Middleware\RedirectIfMember;
@@ -31,6 +32,7 @@ Route::get('/', function () {
 Route::middleware(['auth'])->prefix('/products')->group(function () {
     Route::get('/', ProductsController::class)->name('products');
     Route::get('/{product:slug}', [ProductController::class, 'show'])->name('products.show');
+    Route::get('/download/{product:slug}', [ProductDownloadController::class, 'show'])->name('products.download.show');
 });
 
 Route::middleware(['auth'])->prefix('/cart')->group(function () {
