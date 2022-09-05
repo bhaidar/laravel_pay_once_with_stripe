@@ -6,6 +6,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MemberIndexController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PaymentIndexController;
 use App\Http\Controllers\PaymentRedirectController;
 use App\Http\Controllers\ProductController;
@@ -46,6 +47,8 @@ Route::middleware(['auth'])->prefix('/checkout')->group(function () {
 });
 
 Route::get('/dashboard', DashboardController::class)->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/payment', PaymentController::class);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/members', MemberIndexController::class)

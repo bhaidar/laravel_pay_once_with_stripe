@@ -196,6 +196,9 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         StripeServiceProvider::class,
+
+        // Add this class to debug using messages tab
+        \Barryvdh\Debugbar\ServiceProvider::class,
     ],
 
     /*
